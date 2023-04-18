@@ -6,33 +6,30 @@
 #include <cstring>
 
 std::vector<std::string> tokens;
-
+int i = 0;
 
 void * alphaThread(void * arg) {
-    char* alphaType = "alpha";
-    std::string* inputString = (std::string*) arg;
 
-    for(int j = 0; j < inputString->size(); ++j) {
+    while(i < tokens.size()){
 
-        if(isdigit((*inputString)[j])) break;
-        pthread_exit((void*)alphaType);
-    }   
+        if(!isdigit(tokens[i][0])) {
+            std::cout << "alpha: " << tokens[i] << '\n';
+            ++i;
+        }
+    }
+       
     pthread_exit(NULL); 
 }
 
 void * numericThread(void * arg) {
 
-    bool hasNum = false;
-    char* numericType = "numeric";
-    std::string* inputString = (std::string*) arg;
+    while(i < tokens.size()){
 
-    for(int j = 0; j < inputString->size(); ++j) {
-
-        if(isdigit((*inputString)[j])) hasNum = true;    
+        if(isdigit(tokens[i][0])){
+            std::cout << "numeric: " << tokens[i] << '\n';
+            ++i;
+        }
     }
-    
-    if(hasNum == true)  pthread_exit((void*)numericType);
-    hasNum == false;
 
     pthread_exit(NULL);
 }
@@ -61,13 +58,8 @@ int main(int argc, char *argv[])
 
         pthread_create(&tid1, NULL, &alphaThread  , (void*)& token);
         pthread_create(&tid2, NULL, &numericThread, (void*)& token);
-
-        if(pthread_join(tid1, (void**)tokenType) != NULL){
-            std::cout << tokenType << ": " << token;
-        }
-        if(pthread_join(tid2, (void**)tokenType) != NULL){
-            std::cout << tokenType << ": " << token;
-        }
+        pthread_join(tid1, NULL);
+        pthread_join(tid2, NULL);
     }
     return 0;
 }
