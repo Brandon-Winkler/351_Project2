@@ -38,7 +38,6 @@ int main(int argc, char *argv[])
 {
     std::string readIn = argv[1];
     std::string token = "";
-    char* tokenType;
 
     for(int i = 0; i < readIn.size(); ++i) {
 
